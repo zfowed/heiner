@@ -1,41 +1,4 @@
 {
-  "_from": "heiner",
-  "_id": "heiner@1.0.0",
-  "_inBundle": false,
-  "_integrity": "sha512-GTSDiODBDrgmcNVFxS55fjL2hV+/VggII6uNe9sO7kE+tLSyzM4p7/SAzlqIUhs3Q+geWaYDkxa28oyErsFR4A==",
-  "_location": "/heiner",
-  "_phantomChildren": {
-    "amqplib": "0.5.2",
-    "date-format": "1.2.0",
-    "debug": "3.1.0",
-    "hipchat-notifier": "1.1.0",
-    "loggly": "1.1.1",
-    "mailgun-js": "0.7.15",
-    "ms": "2.0.0",
-    "nodemailer": "2.7.2",
-    "redis": "2.8.0",
-    "semver": "5.4.1",
-    "slack-node": "0.2.0",
-    "streamroller": "0.7.0"
-  },
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "heiner",
-    "name": "heiner",
-    "escapedName": "heiner",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/heiner/-/heiner-1.0.0.tgz",
-  "_shasum": "e8b42abd0867a340e967dd18502bb417b14865bc",
-  "_spec": "heiner",
-  "_where": "E:\\项目\\20171225001_gdtv_discount\\discountServer",
   "author": {
     "name": "zfowed"
   },
@@ -71,5 +34,5 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.3"
+  "version": "1.0.4"
 }
