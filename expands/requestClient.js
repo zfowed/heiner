@@ -1,8 +1,8 @@
 /**
  * @Author: zfowed
  * @Date: 2018-01-01 17:32:37
- * @Last Modified by: acer
- * @Last Modified time: 2018-01-08 09:15:31
+ * @Last Modified by: zfowed
+ * @Last Modified time: 2018-02-21 21:16:42
  */
 
 
@@ -16,42 +16,50 @@ const utils = require('../utils');
 class Client {
     constructor(ctx) {
         this.ctx = ctx;
-
-        this.value = {};
-
-        if (!this.ctx.session.$$client) {
-            this.ctx.session.$$client = {};
-        }
-
-        utils.lodash.assign(this.value, this.ctx.session.$$client, uaParser(this.ctx.get('user-agent')), {
-            id: utils.uuidv1().replace(/-/g, ""),
-            ip: requestIp.getClientIp(this.ctx.req)
-        });
-        
-
+        this._uid = this.ctx.session._uid || (this.ctx.session._uid = utils.uuidv1().replace(/-/g, ""));
+        this._ip = null;
+        this._uaParser = null;
     }
 
-    get(key){
-        if (utils.lodash.isUndefined(key)) {
-            return utils.lodash.cloneDeep(this.value);
-        } 
-        const value = utils.lodash.get(this.value, `${key}`);
-        if (utils.lodash.isPlainObject(value)) {
-            return utils.lodash.cloneDeep(value);
-        }
-        return value;
+    get uid() {
+        return this._uid;
     }
 
-    set(key, value){
-        utils.lodash.set(this.ctx.session.$$client, `${key}`, value);
-        utils.lodash.set(this.value, `${key}`, value);
-        return value;
+    set uid(uid) {
+        this.ctx.session._uid = uid;
+        this._uid = uid;
     }
-    
-    unset(key){
-        utils.lodash.unset(this.ctx.session.$$client, `${key}`);
-        utils.lodash.unset(this.value, `${key}`);
-        return undefined;
+
+    get ip() {
+        return this._ip || (this._ip = requestIp.getClientIp(this.ctx.req));
+    }
+
+    get uaParser() {
+        return this._uaParser || (this._uaParser = uaParser(this.ctx.get('user-agent')));
+    }
+
+    get ua() {
+        return this.ctx.get('user-agent');
+    }
+
+    get browser() {
+        return this.uaParser.browser;
+    }
+
+    get engine() {
+        return this.uaParser.engine;
+    }
+
+    get os() {
+        return this.uaParser.os;
+    }
+
+    get device() {
+        return this.uaParser.device;
+    }
+
+    get cpu() {
+        return this.uaParser.cpu;
     }
 
 }
