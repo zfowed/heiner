@@ -1,8 +1,8 @@
 /**
  * @Author: zfowed
  * @Date: 2017-12-20 14:58:02
- * @Last Modified by: acer
- * @Last Modified time: 2018-01-05 16:22:50
+ * @Last Modified by: zfowed
+ * @Last Modified time: 2018-02-21 21:27:21
  */
 
 
@@ -18,7 +18,9 @@ module.exports = {
 
     logger: {
         dir: '/logger',
-        type: 'console'
+        type: 'console',
+        // template: '${remote_addr} ${remote_user} [${time_local}] "${request}" ${status} ${body_bytes_sent} ${request_time}ms "${http_referer}" "${http_user_agent}" ${logs}'
+        template: '${remote_user} [${time_local}] "${request}" ${status} ${request_time}ms ${logs}'
     },
     
     // Session 配置

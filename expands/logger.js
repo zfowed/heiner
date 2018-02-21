@@ -2,7 +2,7 @@
  * @Author: zfowed
  * @Date: 2018-01-01 20:33:51
  * @Last Modified by: zfowed
- * @Last Modified time: 2018-01-21 21:47:55
+ * @Last Modified time: 2018-02-21 21:25:47
  */
 
 
@@ -30,16 +30,15 @@ module.exports.install = async function (app, options) {
         throw new Error('${options.type} Logger模式必须是["console", "dateFile"]');
     }
 
+    if (!utils.lodash.isString(options.template)) {
+        throw new Error('${options.template} Logger模板必须是字符串');
+    }
 
     log4js.configure({
         replaceConsole: true,
         appenders: {
             'console': {
                 "type": "console",
-                layout: {
-                    type: 'pattern',
-                    pattern: '%[[%d{yyyy-MM-dd hh:mm:ss.SSS}] [%p] %c -%] %x{pid} %m',
-                },
             },
             'request': {
                 type: options.type,
@@ -63,63 +62,78 @@ module.exports.install = async function (app, options) {
     });
 
     
+
+
     const log = log4js.getLogger('request');
 
+    const toString = function (content) {
+        if (utils.lodash.isPlainObject(content)) {
+            try {
+                content = JSON.stringify(content, null, '    ');
+            } catch (error) {
+                
+            }
+        }
+        return `${content}`.replace(/\n/g, '\n        ');
+    };
+
+
     app.use(async function (ctx, next) {
+
+        // 请求时间
         const requestTime = utils.moment();
 
-        let logList = [];
+        let requestLog = '';
 
-        ctx.log = function (info) {
-            logList.push('        [' + utils.moment().format('YYYY-MM-DDTHH:mm:ss.SSS') +  `] ${info}`);
+        let currentLevelIndex = 2;
+        const levelList = ['trace', 'debug', 'info', 'warn', 'error', 'fatal'];
+
+        const recordingLog = function (level, content) {
+            const levelIndexOf = levelList.indexOf(level);
+            if (levelIndexOf > currentLevelIndex) {
+                currentLevelIndex = levelIndexOf;
+            }
+            const time = utils.moment().format('YYYY-MM-DDTHH:mm:ss.SSS');
+            requestLog += `\n    [${time}] [${level}] - ${toString(content)}`;
         };
 
+        ctx.log = utils.lodash.bind(recordingLog, recordingLog, 'info');
+        ctx.log.trace = utils.lodash.bind(recordingLog, recordingLog, 'trace');
+        ctx.log.debug = utils.lodash.bind(recordingLog, recordingLog, 'debug');
+        ctx.log.info = ctx.log;
+        ctx.log.warn = utils.lodash.bind(recordingLog, recordingLog, 'warn');
+        ctx.log.error = utils.lodash.bind(recordingLog, recordingLog, 'error');
+        ctx.log.fatal = utils.lodash.bind(recordingLog, recordingLog, 'fatal');
 
-        let error = null;
 
         try {
             await next();
-        } catch (err) {
+        } catch (error) {
             ctx.status = 500;
-            error = err;
+            ctx.log.fatal(`${error.stack}`);
         }
 
-        const ua = ctx.client.get('ua');
+        let logInfo = utils.lodash.template(options.template)({
+            remote_addr: ctx.client.ip,
+            remote_user: ctx.client.uid,
+            time_local: requestTime.format('YYYY-MM-DDTHH:mm:ss.SSS'),
+            request: `${ctx.method} ${ctx.href} HTTP/${ctx.req.httpVersion}`,
+            http_host: ctx.get('host'),
+            status: ctx.status,
+            // upstream_status: 
+            body_bytes_sent: ctx.response.length || 0,
+            http_referer: ctx.get('referer') || '-',
+            http_user_agent: ctx.client.ua,
+            // ssl_protocol: 
+            // ssl_cipher: 
+            // upstream_addr: 
+            request_time: utils.moment().valueOf() - requestTime.valueOf(),
+            // upstream_response_time: 
+            logs: requestLog
+        });
 
-        let logInfo = [
-            `[${ctx.client.get('mark') || ctx.client.get('id')}]`,
-            `[${ctx.client.get('ip')}]`,
-            `[${requestTime.format('YYYY-MM-DDTHH:mm:ss.SSS')}]`,
-            ctx.method,
-            ctx.url,
-            ctx.status,
-            `${utils.moment().valueOf() - requestTime.valueOf()}ms`
-        ];
+        log[levelList[currentLevelIndex]](logInfo);
 
-
-
-        if (ua) {
-            logInfo.push(`\n    UA: ${ctx.client.get('ua')}`);
-        }
-
-
-        if (ctx.method === 'POST') {
-            const bodystr = JSON.stringify(ctx.request.body);
-            if (bodystr !== '{}') logInfo.push(`\n    BODY: ${bodystr}`);
-        }
-
-        if (logList.length) {
-            logInfo.push(`\n    LOGS: \n${logList.join('\n')}`);
-        }
-
-        if (error) {
-            const errstr = `${error.stack}`.replace(/\n/g, '\n    ');
-            logInfo.push(`\n    ERROR: ${errstr}`);
-            log.error(logInfo.join(' '));
-        } else {
-            log.info(logInfo.join(' '));
-        }
-        
     });
 
 
