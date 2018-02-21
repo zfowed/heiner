@@ -108,7 +108,6 @@ module.exports.install = async function (app, options) {
         return next();
     });
 
-    // console.log(service)
     return service;
 
 };
