@@ -80,10 +80,12 @@ const heiner = async function (projectDir, projectOption) {
     
     
     /** 检查端口 */
-    if (!utils.lodash.isInteger(appConfig.port)) {
-        throw new Error(`${appConfig.port} 端口必须是一个大于零的整数`);
-    } else if (appConfig.port < 0) {
-        throw new Error(`${appConfig.port} 端口必须是一个大于零的整数`);
+    if (!utils.lodash.isUndefined(appConfig.port)) {
+        if (!utils.lodash.isInteger(appConfig.port)) {
+            throw new Error(`${appConfig.port} 端口必须是一个大于零的整数`);
+        } else if (appConfig.port < 0) {
+            throw new Error(`${appConfig.port} 端口必须是一个大于零的整数`);
+        }
     }
 
 
