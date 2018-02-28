@@ -2,7 +2,7 @@
  * @Author: zfowed
  * @Date: 2018-01-01 20:33:51
  * @Last Modified by: zfowed
- * @Last Modified time: 2018-02-21 21:25:47
+ * @Last Modified time: 2018-02-28 14:43:00
  */
 
 
@@ -129,7 +129,8 @@ module.exports.install = async function (app, options) {
             // upstream_addr: 
             request_time: utils.moment().valueOf() - requestTime.valueOf(),
             // upstream_response_time: 
-            logs: requestLog
+            logs: requestLog,
+            _ctx: ctx
         });
 
         log[levelList[currentLevelIndex]](logInfo);
