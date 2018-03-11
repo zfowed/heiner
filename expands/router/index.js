@@ -21,6 +21,10 @@ const getController = require('./getController');
 
 module.exports.install = async function (app, options) {
 
+    if (!utils.lodash.isUndefined(options)) {
+        return null;
+    }
+    
     /** 配置对象不存在表示不启动 */
     if (utils.lodash.isUndefined(options)) {
         return;

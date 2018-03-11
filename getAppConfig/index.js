@@ -9,7 +9,6 @@
 
 'use strict';
 
-const defaultConfig = require('./config.js');
 const utils = require('../utils');
 
 /**
@@ -27,11 +26,21 @@ module.exports = async function (configDir, env) {
         throw new Error(`${configDir} 配置文件夹根路径不存在`);
     }
 
+
+    if (!utils.isFile(utils.rootJoin(configDir, 'default.js'))) {
+        console.log(utils.rootJoin(configDir, 'default.js'))
+        utils.fs.writeFileSync(utils.rootJoin(configDir, 'default.js'), utils.fs.readFileSync(utils.path.join(__dirname, 'config.js')));
+    }
+
     let envList = env.split(',');
     envList.unshift('default');
-    let config = defaultConfig;
+    let config = {};
     
     for (const envItem of envList) {
+
+        if (!envItem) {
+            continue ;
+        }
 
         const jsonConfigPath = utils.path.join(configDir, `${envItem}.json`);
         const jsonConfig = await utils.requireModule(jsonConfigPath, function (err, module) {
@@ -54,7 +63,6 @@ module.exports = async function (configDir, env) {
             }
             return module;
         });
-
 
         utils.lodash.merge(config, jsonConfig, jsConfig);
     }

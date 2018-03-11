@@ -14,6 +14,11 @@ const utils = require('../../utils');
 
 module.exports = async function (app, router, options) {
 
+    /** 配置对象不存在表示不启动 */
+    if (utils.lodash.isUndefined(options)) {
+        return;
+    }
+    
     /** 初始化配置对象 */
     if (!utils.lodash.isPlainObject(options)) {
         throw new Error('${options} 必须是一个普通对象');

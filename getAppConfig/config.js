@@ -19,8 +19,8 @@ module.exports = {
     logger: {
         dir: '/logger',
         type: 'console',
-        // template: '${remote_addr} ${remote_user} [${time_local}] "${request}" ${status} ${body_bytes_sent} ${request_time}ms "${http_referer}" "${http_user_agent}" ${logs}'
-        template: '${remote_user} [${time_local}] "${request}" ${status} ${request_time}ms ${logs}'
+        // template: '{${concurrency}} ${remote_addr} ${remote_user} [${time_local}] "${request}" ${status} ${body_bytes_sent} ${request_time}ms "${http_referer}" "${http_user_agent}" ${logs}'
+        template: '{${concurrency}} ${remote_user} [${time_local}] "${request}" ${status} ${request_time}ms ${logs}'
     },
     
     // Session 配置

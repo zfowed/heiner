@@ -54,7 +54,7 @@ module.exports = async function (app, router, options) {
             // if (utils.lodash.isFunction(fn)) {
             //     router.use(fn);
             // }
-            const fn = await utils.performFunction(fileEl.module, options.options[name], app, app);
+            const fn = await utils.performFunction(fileEl.module, options.options[name], app);
             if (utils.lodash.isFunction(fn)) {
                 app.use(fn);
             }

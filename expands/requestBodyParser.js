@@ -15,6 +15,10 @@ const utils = require('../utils');
 
 module.exports.install = async function (app, options) {
 
+    if (!utils.lodash.isUndefined(options)) {
+        return null;
+    }
+    
     /** 初始化配置对象 */
     if (!utils.lodash.isPlainObject(options)) {
         throw new Error('${options} 必须是一个普通对象');

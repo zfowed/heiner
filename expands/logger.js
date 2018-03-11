@@ -14,6 +14,9 @@ const utils = require('../utils');
 
 module.exports.install = async function (app, options) {
 
+    if (!utils.lodash.isUndefined(options)) {
+        return null;
+    }
 
     /** 初始化配置对象 */
     if (!utils.lodash.isPlainObject(options)) {
@@ -77,8 +80,11 @@ module.exports.install = async function (app, options) {
         return `${content}`.replace(/\n/g, '\n        ');
     };
 
+    let concurrency = 0;
 
     app.use(async function (ctx, next) {
+
+        concurrency += 1;
 
         // 请求时间
         const requestTime = utils.moment();
@@ -130,9 +136,12 @@ module.exports.install = async function (app, options) {
             request_time: utils.moment().valueOf() - requestTime.valueOf(),
             // upstream_response_time: 
             logs: requestLog,
+            concurrency: concurrency,
             _ctx: ctx
         });
 
+        concurrency -= 1;
+        
         log[levelList[currentLevelIndex]](logInfo);
 
     });

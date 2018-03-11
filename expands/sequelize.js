@@ -15,6 +15,10 @@ const Sequelize = require('sequelize');
 
 module.exports.install = async function (app, options) {
 
+    if (!utils.lodash.isUndefined(options)) {
+        return null;
+    }
+
     /** 配置对象不存在表示不启动 */
     if (utils.lodash.isUndefined(options)) {
         return;
@@ -63,6 +67,10 @@ module.exports.install = async function (app, options) {
 
         mergeOption.operatorsAliases = utils.lodash.mapKeys(Sequelize.Op, (value, key) => utils.lodash.template(mergeOption.operatorsAliases)({ key }));
         
+        if (mergeOption.storage) {
+            mergeOption.storage = utils.rootJoin(mergeOption.storage);
+        }
+
         const sequelize = new Sequelize(utils.lodash.omit(mergeOption, ['modelNameMode', 'modelKeyMode']));
 
         const models = {};
