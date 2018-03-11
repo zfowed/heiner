@@ -16,7 +16,7 @@ const utils = require('../utils');
 class Client {
     constructor(ctx) {
         this.ctx = ctx;
-        this._uid = this.ctx.session._uid || (this.ctx.session._uid = utils.uuidv1().replace(/-/g, ""));
+        this._uid = this.ctx.session.uid || (this.ctx.session.uid = utils.uuidv1().replace(/-/g, ""));
         this._ip = null;
         this._uaParser = null;
     }

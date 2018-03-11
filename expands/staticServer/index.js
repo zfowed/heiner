@@ -40,7 +40,7 @@ const readRangeHeader = function (range, totalLength) {
 
 module.exports.install = function (app, options) {
 
-    if (!utils.lodash.isUndefined(options)) {
+    if (utils.lodash.isUndefined(options)) {
         return null;
     }
     

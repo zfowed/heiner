@@ -21,7 +21,7 @@ const getController = require('./getController');
 
 module.exports.install = async function (app, options) {
 
-    if (!utils.lodash.isUndefined(options)) {
+    if (utils.lodash.isUndefined(options)) {
         return null;
     }
     
