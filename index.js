@@ -86,14 +86,78 @@ const heiner = async function (projectDir, projectOption) {
         } else if (appConfig.port < 0) {
             throw new Error(`${appConfig.port} 端口必须是一个大于零的整数`);
         }
-    }
+    } else {
 
+        const net = require('net');
+
+        const probePort = async function (port) {
+            return new Promise((resolve, reject) => {
+
+                const server = net.createServer().listen(port);
+
+                let calledOnce = false;
+
+                const timeoutRef = setTimeout(function () {
+                    calledOnce = true;
+                    return resolve(false);
+                }, 2000);
+
+                timeoutRef.unref();
+
+                let connected = false;
+
+
+                server.on("listening", function () {
+
+                    clearTimeout(timeoutRef);
+
+                    if (server) server.close();
+
+                    if (!calledOnce) {
+                        calledOnce = true;
+                        return resolve(true);
+                    }
+
+                });
+
+                server.on("error", function (err) {
+
+                    clearTimeout(timeoutRef);
+
+                    var result = true;
+
+                    if (err.code === "EADDRINUSE") result = false;
+
+                    if (!calledOnce) {
+
+                        calledOnce = true;
+                        return resolve(result);
+
+                    }
+
+                });
+
+            });
+        };
+
+        const recursiveProbePort = async function (port) {
+            const result = await probePort(port);
+            if (!result) {
+                return recursiveProbePort(port + 1);
+            }
+            return port;
+        };
+
+        appConfig.port = await recursiveProbePort(10000);
+
+    }
 
     app.on('error', err => {
         console.error(err);
     });
 
     app.listen(appConfig.port);
+
     return app;
 };
 
