@@ -28,11 +28,6 @@ module.exports.install = async function (app, options) {
         throw new Error(`${options.dir} Logger文件夹根路径不存在`);
     }
 
-    /** 模式 */
-    if (!['console', 'dateFile'].includes(options.type)) {
-        throw new Error('${options.type} Logger模式必须是["console", "dateFile"]');
-    }
-
     if (!utils.lodash.isString(options.template)) {
         throw new Error('${options.template} Logger模板必须是字符串');
     }
@@ -44,7 +39,7 @@ module.exports.install = async function (app, options) {
                 "type": "console",
             },
             'request': {
-                type: options.type,
+                type: app.config.debug ? 'console' : 'dateFile',
                 filename: utils.rootJoin(options.dir, './request/'),
                 alwaysIncludePattern: true,
                 compress: false,

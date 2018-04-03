@@ -9,15 +9,12 @@
 
 'use strict';
 
-const request = require('request');
+// const request = require('request');
+const rp = require('request-promise');
 
 module.exports.install = async function (app, options) {
 
-
-
-    app.curl = request;
-    app.context.curl = request;
-
-    
+    app.curl = rp;
+    app.context.curl = rp;
 
 }

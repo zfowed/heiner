@@ -20,7 +20,7 @@ module.exports.install = async function (app, options) {
         throw new Error('${options} 必须是一个普通对象');
     }
 
-    const aes = new utils.AesCrypto(`${app.keys}`);
+    const aes = new utils.AesCrypto(`session-${app.keys}`);
 
     app.use(koaSession(Object.assign({}, options, {
         encode(body) {

@@ -13,14 +13,16 @@ module.exports = {
     // 监听端口
     port: 3000,
 
+    // DEBUG
+    debug: true,
+
     // Cookie 加密的KEY 默认随机
     keys: ['cookie-key'],
 
     logger: {
         dir: '/logger',
-        type: 'console',
-        // template: '{${concurrency}} ${remote_addr} ${remote_user} [${time_local}] "${request}" ${status} ${body_bytes_sent} ${request_time}ms "${http_referer}" "${http_user_agent}" ${logs}'
         template: '{${concurrency}} ${remote_user} [${time_local}] "${request}" ${status} ${request_time}ms ${logs}'
+        // template: '{${concurrency}} ${remote_addr} ${remote_user} [${time_local}] "${request}" ${status} ${body_bytes_sent} ${request_time}ms "${http_referer}" "${http_user_agent}" ${logs}'
     },
     
     // Session 配置

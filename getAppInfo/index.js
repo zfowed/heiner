@@ -43,7 +43,7 @@ module.exports = async function (projectDir, projectOption) {
     const argv = utils.yargs.argv;
 
     /** @type {string} 启动项目模式（用于拉取配置文件） */
-    const env = String(projectOption.env || argv.NODE_ENV || process.env.NODE_ENV || '');
+    const env = String(projectOption.env || argv.NODE_ENV || process.env.NODE_ENV || 'development');
 
     /** @type {string} 项目根目录 */
     const root = projectDir;
