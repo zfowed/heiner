@@ -22,7 +22,14 @@ module.exports.install = async function (app, options) {
 
     const aes = new utils.AesCrypto(`session-${app.keys}`);
 
-    app.use(koaSession(Object.assign({}, options, {
+    app.use(koaSession(Object.assign({
+        key: 'heiner:sass',
+        maxAge: 86400000,
+        overwrite: true,
+        httpOnly: true,
+        signed: true,
+        rolling: false,
+    }, options, {
         encode(body) {
             body = JSON.stringify(body);
             return aes.encrypt(body);
