@@ -2,7 +2,7 @@
  * @Author: zfowed
  * @Date: 2018-04-04 08:58:02
  * @Last Modified by: zfowed
- * @Last Modified time: 2018-04-04 08:58:27
+ * @Last Modified time: 2018-04-04 09:04:57
  */
 
 
@@ -11,7 +11,7 @@
 
 const utils = require('../utils');
 
-module.exports = async function (app, options) {
+module.exports.install = async function (app, options) {
 
     /** 配置对象不存在表示不启动 */
     if (utils.lodash.isUndefined(options)) {
