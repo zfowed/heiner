@@ -155,24 +155,24 @@ module.exports = {
 
     },
 
+    // 中间件
+    middleware: {
+
+        // 中间件文件夹路径
+        dir: '/app/middleware',
+
+        // 使用中间件
+        use: [],
+
+        // 中间件配置
+        options: {}
+    },
+
     // 路由
     router: {
 
         // 路由文件夹路径
         dir: '/app/router',
-
-        // 中间件
-        middleware: {
-
-            // 中间件文件夹路径
-            dir: '/app/middleware',
-
-            // 使用中间件
-            use: [],
-
-            // 中间件配置
-            options: {}
-        },
 
         // 控制器
         controller: {
