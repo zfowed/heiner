@@ -13,7 +13,6 @@ const Router = require('koa-router');
 
 const utils = require('../../utils');
 
-const useMiddleware = require('./useMiddleware');
 const useView = require('./useView');
 const getController = require('./getController');
 
@@ -43,12 +42,9 @@ module.exports.install = async function (app, options) {
 
     const router = new Router();
 
-    await useMiddleware(app, router, options.middleware);
-
     await useView(app, router, options.view);
 
     const controller = await getController(app, router, options.controller)
-    
 
     const itemRouterFileList = new utils.FileLink(options.dir).childFile;
     for (const itemRouterFile of itemRouterFileList) {

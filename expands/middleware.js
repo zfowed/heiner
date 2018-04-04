@@ -1,17 +1,17 @@
-/**
+/*
  * @Author: zfowed
- * @Date: 2017-12-24 17:38:46
+ * @Date: 2018-04-04 08:58:02
  * @Last Modified by: zfowed
- * @Last Modified time: 2018-01-21 15:14:20
+ * @Last Modified time: 2018-04-04 08:58:27
  */
 
 
 
 'use strict';
 
-const utils = require('../../utils');
+const utils = require('../utils');
 
-module.exports = async function (app, router, options) {
+module.exports = async function (app, options) {
 
     /** 配置对象不存在表示不启动 */
     if (utils.lodash.isUndefined(options)) {
@@ -50,10 +50,6 @@ module.exports = async function (app, router, options) {
             if (!utils.lodash.isFunction(fileEl.module)) {
                 throw new Error(`${fileEl.absolutePath} 模块必须是一个函数`);
             }
-            // const fn = await utils.performFunction(fileEl.module, options.options[name], router, app);
-            // if (utils.lodash.isFunction(fn)) {
-            //     router.use(fn);
-            // }
             const fn = await utils.performFunction(fileEl.module, options.options[name], app);
             if (utils.lodash.isFunction(fn)) {
                 app.use(fn);

@@ -27,6 +27,7 @@ const heinerHelper = require('./expands/helper');
 const heinerHttp = require('./expands/http');
 const heinerSequelize = require('./expands/sequelize');
 const heinerService = require('./expands/service');
+const heinerMiddleware = require('./expands/middleware');
 const heinerRouter = require('./expands/router');
 const heinerStaticServer = require('./expands/staticServer');
 
@@ -74,6 +75,8 @@ const heiner = async function (projectDir, projectOption) {
     await heinerUse('requestFormidable', heinerRequestFormidable);
     
     await heinerUse('router', heinerRouter);
+    
+    await heinerUse('middleware', heinerMiddleware);
 
     await heinerUse('staticServer', heinerStaticServer);
 
