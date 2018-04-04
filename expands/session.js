@@ -13,12 +13,10 @@ const koaSession = require('koa-session');
 
 const utils = require('../utils');
 
-module.exports.install = async function (app, options) {
+module.exports.install = async function (app, _options) {
 
     /** 初始化配置对象 */
-    if (!utils.lodash.isPlainObject(options)) {
-        throw new Error('${options} 必须是一个普通对象');
-    }
+    const options = utils.lodash.isPlainObject(_options) ? _options : {};
 
     const aes = new utils.AesCrypto(`session-${app.keys}`);
 
