@@ -112,7 +112,7 @@ module.exports.install = async function (app, options) {
         } catch (error) {
             if (error.expose) {
                 ctx.status = error.status;
-                ctx.message = error.message;
+                ctx.body = error;
             } else {
                 ctx.status = 500;
             }
