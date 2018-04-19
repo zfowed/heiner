@@ -59,6 +59,13 @@ module.exports.install = async function (app, options) {
         } else if (!utils.lodash.isFunction(service)) {
             throw new Error(`${this.absolutePath} 模块必须返回一个函数或类！`);
         }
+        
+        if (utils.isAsyncFunction(service.asyncConstructor)) {
+            await service.asyncConstructor(self);
+        } else if (utils.lodash.isFunction(service.asyncConstructor)) {
+            service.asyncConstructor(self);
+        }
+
         return service;
     });
 
