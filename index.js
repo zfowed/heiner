@@ -74,9 +74,9 @@ const heiner = async function (projectDir, projectOption) {
 
     await heinerUse('requestFormidable', heinerRequestFormidable);
     
-    await heinerUse('router', heinerRouter);
-    
     await heinerUse('middleware', heinerMiddleware);
+    
+    await heinerUse('router', heinerRouter);
 
     await heinerUse('staticServer', heinerStaticServer);
 
