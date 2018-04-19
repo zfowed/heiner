@@ -64,13 +64,7 @@ module.exports = async function (app, router, options) {
             if (Object.getPrototypeOf(controller) !== app.Controller) {
                 throw new Error(`${this.absolutePath} 模块返回的类必须继承\${app.Controller}！`);
             }
-            const cont = new controller(self);
-            if (utils.isAsyncFunction(cont.asyncConstructor)) {
-                await cont.asyncConstructor(self);
-            } else if (utils.lodash.isFunction(cont.asyncConstructor)) {
-                cont.asyncConstructor(self);
-            }
-            return cont;
+            return new controller(self);
         } else if (utils.lodash.isFunction(controller)) {
             return item.bind(self);
         }
