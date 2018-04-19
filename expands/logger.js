@@ -110,7 +110,9 @@ module.exports.install = async function (app, options) {
         try {
             await next();
         } catch (error) {
-            ctx.status = 500;
+            if (!error.expose) {
+                ctx.status = 500;
+            }
             ctx.log.fatal(`${error.stack}`);
         }
 
