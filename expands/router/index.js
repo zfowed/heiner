@@ -51,14 +51,14 @@ module.exports.install = async function (app, options) {
         if (itemRouterFile.name !== 'index.js' && utils.lodash.isFunction(itemRouterFile.module)) {
             const itemRouter = new Router();
             const itemController = controller[itemRouterFile.basename];
-            await utils.performFunction(itemRouterFile.module, itemRouter, itemController);
+            await utils.performFunction(itemRouterFile.module, itemRouter, itemController, app);
             router.use(`/${itemRouterFile.basename}`, itemRouter.routes(), itemRouter.allowedMethods());
         }
     }
     
     const indexRouterFile = new utils.FileLink(options.dir, 'index.js');
     if (indexRouterFile.isFile && utils.lodash.isFunction(indexRouterFile.module)) {
-        await utils.performFunction(indexRouterFile.module, router, controller);
+        await utils.performFunction(indexRouterFile.module, router, controller, app);
     }
 
 
