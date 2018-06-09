@@ -95,7 +95,7 @@ module.exports.install = function (app, options) {
         const rootDir = utils.rootJoin(item);
 
         /** 检查文件夹 */
-        if (!utils.isDirectory(rootDir)) {
+        if (!utils.isDirectory(item)) {
             throw new Error(`${rootDir} StaticServer文件夹根路径不存在`);
         }
 
