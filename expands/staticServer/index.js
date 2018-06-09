@@ -49,10 +49,6 @@ module.exports.install = function (app, options) {
         throw new Error('${options} 必须是一个普通对象');
     }
 
-    
-    const rootDirList = utils.lodash.castArray(utils.rootJoin(options.dir));
-
-
     const useService = function (staticService) {
 
 
@@ -92,9 +88,12 @@ module.exports.install = function (app, options) {
     
     };
 
+    const rootDirList = utils.lodash.castArray(options.dir);
 
-    for (const rootDir of rootDirList) {
-        
+    for (const item of rootDirList) {
+
+        const rootDir = utils.rootJoin(item);
+
         /** 检查文件夹 */
         if (!utils.isDirectory(rootDir)) {
             throw new Error(`${rootDir} StaticServer文件夹根路径不存在`);
