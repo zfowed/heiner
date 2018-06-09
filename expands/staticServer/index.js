@@ -55,45 +55,55 @@ module.exports.install = function (app, options) {
     }
 
     
-    const rootDir = utils.rootJoin(options.dir);
-
-    const staticService = koaStatic(rootDir, options);
+    const rootDirList = utils.lodash.castArray(utils.rootJoin(options.dir));
 
 
-    app.use(async (ctx, next) => {
+    const useService = function (staticService) {
 
-        let exist = true;
+        app.use(async (ctx, next) => {
 
-        await staticService(ctx, async _ => {
-            exist = false;
+            let exist = true;
+    
+            await staticService(ctx, async _ => {
+                exist = false;
+            });
+    
+            if (!exist) { return next(); }
+    
+            const rangeHeader = ctx.get('range');
+            if (!rangeHeader) { return ; }
+    
+            const fileEl = new utils.FileLink(filename);
+    
+            const [start, end] = readRangeHeader(rangeHeader, fileEl.size);
+    
+            if (start >= fileEl.size || end >= fileEl.size) {
+                ctx.set('Content-Range', 'bytes */');
+                ctx.status = 416;
+                return;
+            }
+    
+            ctx.set('Content-Range', `bytes ${start}-${end}/${fileEl.size}`);
+            ctx.set('Content-Length', start === end ? 0 : (end - start + 1));
+            ctx.set('Accept-Ranges', 'bytes');
+            ctx.set('Cache-Control', 'no-cache');
+    
+            ctx.status = 206;
+    
+            ctx.body = fs.createReadStream(filename, { start, end });
+    
         });
+    
+    };
 
-        if (!exist) { return next(); }
+    
+    for (const rootDir of rootDirList) {
+        
+        const staticService = koaStatic(rootDir, options);
 
-        const rangeHeader = ctx.get('range');
-        if (!rangeHeader) { return ; }
+        useService(staticService);
 
-        const fileEl = new utils.FileLink(filename);
-
-        const [start, end] = readRangeHeader(rangeHeader, fileEl.size);
-
-        if (start >= fileEl.size || end >= fileEl.size) {
-            ctx.set('Content-Range', 'bytes */');
-            ctx.status = 416;
-            return;
-        }
-
-        ctx.set('Content-Range', `bytes ${start}-${end}/${fileEl.size}`);
-        ctx.set('Content-Length', start === end ? 0 : (end - start + 1));
-        ctx.set('Accept-Ranges', 'bytes');
-        ctx.set('Cache-Control', 'no-cache');
-
-        ctx.status = 206;
-
-        ctx.body = fs.createReadStream(filename, { start, end });
-
-    });
-
+    }
 
 
 };
