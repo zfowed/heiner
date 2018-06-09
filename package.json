@@ -1,8 +1,16 @@
 {
-  "author": {
-    "name": "zfowed"
+  "name": "heiner",
+  "main": "index.js",
+  "version": "4.4.6",
+  "description": "A node framework",
+  "keywords": [
+    "node",
+    "framework"
+  ],
+  "author": "zfowed <zfowed@qq.com>",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "bundleDependencies": false,
   "dependencies": {
     "formidable": "^1.2.1",
     "koa": "^2.5.1",
@@ -22,18 +30,10 @@
     "uuid": "^3.2.1",
     "yargs": "^10.0.3"
   },
-  "deprecated": false,
-  "description": "A node framework",
   "devDependencies": {},
-  "keywords": [
-    "node",
-    "framework"
-  ],
-  "license": "ISC",
-  "main": "index.js",
-  "name": "heiner",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "engines": {
+    "node": ">= 8.9.0",
+    "npm": ">= 5.5.1"
   },
-  "version": "4.4.6"
+  "license": "ISC"
 }
